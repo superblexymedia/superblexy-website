@@ -27,11 +27,16 @@ Messages arrive from notify@web3forms.com, currently under Gmail's **Updates** t
 | www CNAME | sites.framer.app | **Change to the Cloudflare Pages address** |
 | @ MX | 1 smtp.google.com | Keep. Google Workspace email |
 | @ TXT | google-site-verification=… | Keep |
-| SPF | **missing** | Add `v=spf1 include:_spf.google.com ~all` |
-| DKIM | **missing** | Generate in Google Admin → Gmail → Authenticate email |
-| DMARC | **missing** | Add `_dmarc` TXT `v=DMARC1; p=none; rua=mailto:info@superblexymedia.com` |
+| SPF | added 5 Nov 2026 | `v=spf1 include:_spf.google.com ~all` |
+| DKIM | added 5 Nov 2026 | `google._domainkey` TXT (2048-bit), authentication ON in Google Admin |
+| DMARC | added 5 Nov 2026 | `_dmarc` TXT `v=DMARC1; p=none; rua=mailto:info@superblexymedia.com` |
+| a A ×2 | 31.43.160.6 / 31.43.161.6 (Framer IPs on host `a`, a typo) | Delete at cutover |
 
 Only the `www` record changes for the website, so email is never touched by the move.
+
+## Hosting
+
+Cloudflare Pages project `superblexy-website` (account info@superblexymedia.com), connected to GitHub `superblexymedia/superblexy-website`, branch `main`, output folder `dist`, no build command. Every push to `main` deploys automatically. Preview: https://superblexy-website.pages.dev
 
 ## Cutover checklist
 
