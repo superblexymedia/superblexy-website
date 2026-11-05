@@ -145,6 +145,7 @@ def page(path, title, desc, og, body, active=None, schema=None, preload=''):
 <meta name="description" content="{esc(desc)}">
 <link rel="canonical" href="{url}">
 <meta name="robots" content="max-image-preview:large">
+<meta name="google-site-verification" content="aOizc_ln1K5MLUmV0eSBJIwyZqiZ1avKjuW50EyIefo">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Superblexy Media">
 <meta property="og:url" content="{url}">
