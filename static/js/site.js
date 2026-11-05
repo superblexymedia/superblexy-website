@@ -1,5 +1,8 @@
 // Superblexy Media — site behaviour (no dependencies)
 (function () {
+  // Keep the footer year current without a rebuild
+  document.querySelectorAll('[data-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });
+
   // Gentle reveal-on-scroll
   if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.documentElement.classList.add('js-reveal');

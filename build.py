@@ -117,7 +117,7 @@ def footer():
 <nav class="footer-pages" aria-label="Footer"><a href="/">Home</a><a href="/about">About</a><a href="/projects">Projects</a><a href="/services">Services</a><a href="/contact">Contact</a></nav>
 <nav class="socials" aria-label="Social media">{soc}</nav>
 </div>
-<div class="footer-legal"><p>Superblexy Media LLC. 815 Brazos St., Ste 500, 78701 Austin TX</p><p>Copyright © {year} Superblexy Media LLC. | All Rights Reserved</p></div>
+<div class="footer-legal"><p>Superblexy Media LLC. 815 Brazos St., Ste 500, 78701 Austin TX</p><p>Copyright © <span data-year>{year}</span> Superblexy Media LLC. | All Rights Reserved</p></div>
 </div></footer>'''
 
 ORG = {
