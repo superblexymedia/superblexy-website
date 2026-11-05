@@ -96,14 +96,27 @@ def header(active):
 <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
 </div></header>'''
 
+ICONS = {
+    'Instagram': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>',
+    'Tiktok': '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.2 3c.3 2.3 1.8 3.9 4 4.1v3.1c-1.5.1-2.9-.4-4-1.2v6.3a5.6 5.6 0 1 1-5.6-5.6c.3 0 .6 0 .9.1v3.2a2.5 2.5 0 1 0 1.6 2.3V3h3.1z"/></svg>',
+    'Linkedin': '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.2 9h3.2v11H4.2zM5.8 3.6a1.85 1.85 0 1 1 0 3.7 1.85 1.85 0 0 1 0-3.7zM10 9h3.1v1.5h.1c.4-.8 1.5-1.8 3.1-1.8 3.3 0 3.9 2.2 3.9 5V20h-3.2v-5.5c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V20H10z"/></svg>',
+    'Email': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>',
+}
+SOCIAL_LABELS = {'Instagram': 'Instagram', 'Tiktok': 'TikTok', 'Linkedin': 'LinkedIn'}
+
 def footer():
-    soc = ''.join(f'<a href="{u}" target="_blank" rel="noopener">{t}</a>' for t, u in SOCIALS)
+    soc = ''
+    for t, u in SOCIALS:
+        soc += f'<a class="soc" href="{u}" target="_blank" rel="noopener" aria-label="Superblexy Media on {SOCIAL_LABELS[t]}" title="{SOCIAL_LABELS[t]}">{ICONS[t]}</a>'
+    soc += f'<a class="soc" href="mailto:info@superblexymedia.com" aria-label="Email us" title="Email">{ICONS["Email"]}</a>'
     year = datetime.date.today().year
     return f'''<footer class="site-footer"><div class="wrap">
 <div class="footer-top"><p>Ready to work magic?</p>
 <a class="contact-link" href="/contact">Contact Us<span class="circle" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h16M14 6l6 6-6 6"/></svg></span></a></div>
-<nav class="socials" aria-label="Social">{soc}<a href="mailto:info@superblexymedia.com">Email</a></nav>
+<div class="footer-mid">
 <nav class="footer-pages" aria-label="Footer"><a href="/">Home</a><a href="/about">About</a><a href="/projects">Projects</a><a href="/services">Services</a><a href="/contact">Contact</a></nav>
+<nav class="socials" aria-label="Social media">{soc}</nav>
+</div>
 <div class="footer-legal"><p>Superblexy Media LLC. 815 Brazos St., Ste 500, 78701 Austin TX</p><p>Copyright © {year} Superblexy Media LLC. | All Rights Reserved</p></div>
 </div></footer>'''
 
@@ -145,7 +158,7 @@ def page(path, title, desc, og, body, active=None, schema=None, preload=''):
 <meta name="twitter:description" content="{esc(desc)}">
 <meta name="twitter:image" content="{SITE}/img/{og}.jpg">
 <link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#000000">
 <link rel="preload" href="/fonts/outfit-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -200,33 +213,46 @@ def home():
                 'og-home', body, '/', preload='<link rel="preload" href="/media/hero-poster.webp" as="image">\n')
 
 def about():
-    imgs = [('bts-1', 'Blessing Jimoh editing audio in the studio'), ('bts-2', 'Blessing on set at an indoor sports arena'),
-            ('bts-3', 'Blessing with a gimbal camera rig'), ('bts-4', 'Superblexy crew on a podcast set'),
-            ('bts-5', 'Podcast guest on a Superblexy shoot'), ('bts-6', 'Behind the scenes on a Superblexy production'),
-            ('bts-7', 'Behind the scenes on a Superblexy production'), ('bts-8', 'Behind the scenes on a Superblexy shoot'),
-            ('bts-9', 'Behind the scenes on a Superblexy shoot')]
-    def im(i, w, h): f, a = imgs[i]; return f'<img src="/img/{f}.webp" alt="{a}" width="{w}" height="{h}" loading="lazy" decoding="async">'
-    gallery = (f'<div class="row r3">{im(0,854,999)}{im(1,855,999)}{im(2,855,999)}</div>'
-               f'<div class="row r2">{im(3,1234,1361)}{im(4,1150,1361)}</div>'
-               f'<div class="row r2b">{im(5,854,999)}{im(6,855,999)}</div>'
-               f'<div class="row r2">{im(7,1300,1733)}{im(8,1300,1733)}</div>')
-    body = f'''<section class="about-hero wrap">
-<p class="section-title">Who is Superblexy Media</p>
+    gal = [('bts-1', 'Blessing Jimoh editing audio in the studio', 854, 999), ('bts-4', 'Superblexy crew on a podcast set', 1234, 1361),
+           ('bts-2', 'Blessing on set at an indoor sports arena', 855, 999), ('bts-8', 'Behind the scenes on a Superblexy shoot', 1300, 1733),
+           ('bts-3', 'Blessing with a gimbal camera rig', 855, 999), ('bts-5', 'Podcast guest on a Superblexy shoot', 1150, 1361),
+           ('bts-6', 'Behind the scenes on a Superblexy production', 854, 999), ('bts-9', 'Behind the scenes on a Superblexy shoot', 1300, 1733),
+           ('bts-7', 'Behind the scenes on a Superblexy production', 855, 999)]
+    gallery = ''.join(f'<figure><img src="/img/{f}.webp" alt="{a}" width="{w}" height="{h}" loading="lazy" decoding="async"></figure>' for f, a, w, h in gal)
+    stats = [('8', 'The age I started editing'), ('12', 'When I got paid for my first edit'),
+             ('200M+', 'Combined monthly viewers across the clients we edit for'), ('48h', 'Turnaround on a first cut')]
+    st = ''.join(f'<div class="stat"><p class="stat-num">{n}</p><p class="stat-label">{esc(l)}</p></div>' for n, l in stats)
+    chips = ''.join(f'<li>{t}</li>' for t in ['Video editors', 'Videographer', 'Graphic designer', 'Social media manager'])
+    body = f'''<section class="ab-hero wrap">
+<div class="ab-copy">
+<p class="eyebrow ab-eyebrow">Who is Superblexy Media</p>
 <h1 class="display">Fueled by Passion,<br class="br-lg"> Framed by Vision</h1>
-<div class="about-stage">
-<img class="side-photo" src="/img/about-studio.webp" alt="Superblexy Media filming a seated interview in a studio" width="600" height="631" loading="lazy">
-<img class="portrait" src="/img/blessing-jimoh.webp" alt="Blessing Jimoh, founder of Superblexy Media" width="1100" height="1467" fetchpriority="high">
-<p class="intro">I'm Blessing Jimoh, founder of Superblexy Media. I grew up around my father's cameras, started editing at 8, and was getting paid for it by 12. Superblexy Media is what that obsession grew into.</p>
-</div></section>
-<section class="about-story wrap">
-<h2>From One Editor to a Full Team</h2>
-<div class="copy"><p>What started as one kid at a computer is now a Lagos-based team of video editors, a videographer, a graphic designer and a social media manager, editing for clients across the US and worldwide.</p>
-<p>Together, we’ve edited for clients whose combined audiences reach over 200 million monthly viewers, from the Big Technology Podcast to Indiewalls. Every project still runs on what I started with: story first, everything else after.</p></div>
+<p class="ab-intro">I'm Blessing Jimoh, founder of Superblexy Media. I grew up around my father's cameras, started editing at 8, and was getting paid for it by 12. Superblexy Media is what that obsession grew into.</p>
+<p class="ab-sign">Blessing Jimoh <span>Founder, Superblexy Media</span></p>
+<div class="hero-actions"><a class="btn btn-black" href="{CALENDLY_30}" target="_blank" rel="noopener">Book a call</a><a class="btn btn-outline" href="/projects">See our work</a></div>
+</div>
+<div class="ab-visual">
+<div class="ab-portrait"><img src="/img/blessing-jimoh.webp" alt="Blessing Jimoh, founder of Superblexy Media" width="1100" height="1467" fetchpriority="high"></div>
+<img class="ab-inset" src="/img/about-studio.webp" alt="Superblexy Media filming a seated interview in a studio" width="600" height="631" loading="lazy">
+<p class="ab-tag">Lagos-based · Editing for the US &amp; worldwide</p>
+</div>
 </section>
+<section class="ab-stats" aria-label="Superblexy in numbers"><div class="wrap stats-grid">{st}</div></section>
+<section class="ab-story wrap">
+<h2>From One Editor<br class="br-lg"> to a Full Team</h2>
+<div class="copy">
+<p>What started as one kid at a computer is now a Lagos-based team of video editors, a videographer, a graphic designer and a social media manager, editing for clients across the US and worldwide.</p>
+<ul class="chips" aria-label="The team">{chips}</ul>
+<p>Together, we’ve edited for clients whose combined audiences reach over 200 million monthly viewers, from the Big Technology Podcast to Indiewalls. Every project still runs on what I started with: story first, everything else after.</p>
+</div>
+</section>
+<section class="ab-quote wrap" aria-label="Our philosophy"><blockquote>“Story first,<br> everything else after.”</blockquote></section>
 <section class="dark section wrap" aria-labelledby="bts-h">
-<h2 id="bts-h" class="section-title" style="margin-bottom:32px">Behind The lens</h2>
-<div class="gallery">{gallery}</div>
-</section>'''
+<div class="bts-head"><h2 id="bts-h">Behind The Lens</h2><p>On set, in the edit suite, and everywhere in between.</p></div>
+<div class="masonry">{gallery}</div>
+</section>
+{trusted()}
+<section class="soft"><div class="cta-band wrap"><h2>Have a project in mind?</h2><a class="btn btn-black" href="{CALENDLY_30}" target="_blank" rel="noopener">Book a Call</a></div></section>'''
     return page('/about', 'About Superblexy Media | Founded by Blessing Jimoh',
                 'Founded by Blessing Jimoh, Superblexy Media is a Lagos-based team of editors and creatives editing podcasts, YouTube and brand content for clients in the US and worldwide.',
                 'og-about', body, '/about',
@@ -292,7 +318,15 @@ def contact():
 <label class="field"><span class="sr-only">Tell us about your project (required)</span><textarea name="message" placeholder="Tell us about your project*" required></textarea></label>
 <button class="btn btn-black" type="submit">Submit</button>
 <p class="form-status" role="status" aria-live="polite"></p>
-</form></section>
+</form>
+<div class="form-success" id="form-success" hidden tabindex="-1">
+<div class="fs-icon" aria-hidden="true"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24" fill="none"/><path fill="none" d="M15 27l7 7 15-16"/></svg></div>
+<h2>Message received!</h2>
+<p class="fs-lead">Thanks<span data-fs-name></span>. Your project details are with us, and we'll reply to <strong data-fs-email>your email</strong> soon.</p>
+<p class="fs-next">Want to move faster? Pick a time that works for you.</p>
+<div class="hero-actions"><a class="btn btn-solid" href="{CALENDLY_30}" target="_blank" rel="noopener">Book a call now</a><a class="btn btn-ghost" href="/projects">See our work</a></div>
+<button type="button" class="fs-again" data-fs-again>Send another message</button>
+</div></section>
 <section class="book" aria-labelledby="book-h">
 <h2 id="book-h">or Book a Call</h2>
 <p class="note"><a href="{CALENDLY_30}" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:3px">Calendar not loading? Book here</a></p>

@@ -70,6 +70,15 @@
     } else load();
   }
 
+  // "Send another message" resets the success panel
+  var again = document.querySelector('[data-fs-again]');
+  if (again) again.addEventListener('click', function () {
+    var f = document.querySelector('#contact-form'), ok = document.getElementById('form-success');
+    ok.hidden = true; f.hidden = false;
+    var h1 = f.parentNode.querySelector('h1'); if (h1) h1.hidden = false;
+    f.querySelector('[name=name]').focus();
+  });
+
   // Contact form (Web3Forms)
   var form = document.querySelector('#contact-form');
   if (form) form.addEventListener('submit', function (e) {
@@ -86,9 +95,18 @@
       .then(function (r) { return r.json().then(function (j) { return { ok: r.ok && j.success, j: j }; }); })
       .then(function (res) {
         if (res.ok) {
+          var ok = document.getElementById('form-success');
+          var first = nm.split(' ')[0];
+          ok.querySelector('[data-fs-name]').textContent = first ? ', ' + first : '';
+          ok.querySelector('[data-fs-email]').textContent = form.querySelector('[name=email]').value || 'your email';
           form.reset();
-          status.className = 'form-status ok';
-          status.textContent = "Thanks! Your message is in. We'll get back to you soon.";
+          status.className = 'form-status';
+          status.textContent = '';
+          form.hidden = true;
+          var h1 = form.parentNode.querySelector('h1'); if (h1) h1.hidden = true;
+          ok.hidden = false;
+          ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          ok.focus({ preventScroll: true });
         } else throw new Error((res.j && res.j.message) || 'failed');
       })
       .catch(function () {
