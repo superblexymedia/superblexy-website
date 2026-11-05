@@ -11,7 +11,13 @@ CALENDLY = 'https://calendly.com/superblexymedia'
 CALENDLY_30 = 'https://calendly.com/superblexymedia/30min'
 # Web3Forms access key — free, created at https://web3forms.com with info@superblexymedia.com
 WEB3FORMS_KEY = os.environ.get('WEB3FORMS_KEY', '949907a6-a390-45f8-8386-d16c4a79e888')
-VERSION = datetime.date.today().strftime('%Y%m%d')
+import hashlib
+def _fingerprint():
+    h = hashlib.sha1()
+    for f in ('static/css/site.css', 'static/js/site.js'):
+        h.update(open(os.path.join(ROOT, f), 'rb').read())
+    return h.hexdigest()[:10]
+VERSION = _fingerprint()
 
 SOCIALS = [
     ('Instagram', 'https://www.instagram.com/superblexy/'),
