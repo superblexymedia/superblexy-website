@@ -21,10 +21,9 @@
   // YouTube click-to-play (loads the player only when clicked)
   document.querySelectorAll('.yt[data-id]').forEach(function (el) {
     var img = el.querySelector('img');
-    if (img) img.addEventListener('load', function () {
-      // YouTube returns a 120px placeholder when maxres doesn't exist
-      if (img.naturalWidth <= 120 && img.src.indexOf('maxresdefault') > -1) img.src = img.src.replace('maxresdefault', 'hqdefault');
-    });
+    // YouTube returns a 120px placeholder when maxres doesn't exist: fall back to hqdefault
+    var fix = function () { if (img.naturalWidth <= 120 && img.src.indexOf('maxresdefault') > -1) img.src = img.src.replace('maxresdefault', 'hqdefault'); };
+    if (img) { if (img.complete && img.naturalWidth) fix(); img.addEventListener('load', fix); img.addEventListener('error', fix); }
     el.addEventListener('click', function () {
       var id = el.getAttribute('data-id');
       var f = document.createElement('iframe');
