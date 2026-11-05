@@ -68,9 +68,9 @@
       s.async = true;
       document.body.appendChild(s);
     };
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (e, o) { if (e[0].isIntersecting) { load(); o.disconnect(); } }, { rootMargin: '400px' }).observe(cal);
-    } else load();
+    // Start loading right away (Calendly is the slowest part of the page)
+    if (document.readyState === 'complete') load(); else window.addEventListener('load', load);
+    setTimeout(load, 1500);
   }
 
   // "Send another message" resets the success panel

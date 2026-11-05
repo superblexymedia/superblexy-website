@@ -332,11 +332,12 @@ def contact():
 <section class="book" aria-labelledby="book-h">
 <h2 id="book-h">or Book a Call</h2>
 <p class="note"><a href="{CALENDLY_30}" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:3px">Calendar not loading? Book here</a></p>
-<div class="calendly-inline-widget" data-url="{CALENDLY_30}?hide_gdpr_banner=1"></div>
+<div class="calendly-inline-widget" data-url="{CALENDLY_30}?hide_gdpr_banner=1"><p class="cal-loading">Loading calendar…</p></div>
 </section></div>'''
     return page('/contact', 'Contact Superblexy Media | Work with Us',
                 'Tell us about your podcast, YouTube or brand video project, or book a 30-minute call with Superblexy Media.',
-                'og-contact', body, '/contact', schema=[{"@type": "ContactPage", "url": SITE + "/contact"}])
+                'og-contact', body, '/contact', schema=[{"@type": "ContactPage", "url": SITE + "/contact"}],
+                preload='<link rel="preconnect" href="https://assets.calendly.com">\n<link rel="preconnect" href="https://calendly.com">\n<link rel="preload" href="https://assets.calendly.com/assets/external/widget.js" as="script">\n')
 
 def agencies():
     blocks = [
