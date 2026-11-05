@@ -79,6 +79,8 @@
     if (form.querySelector('[name=botcheck]').checked) return;
     status.className = 'form-status';
     status.textContent = 'Sending…';
+    var nm = (form.querySelector('[name=name]').value || '').trim();
+    form.querySelector('[name=subject]').value = 'New enquiry from ' + (nm || 'the website') + ' · superblexymedia.com';
     submit.disabled = true;
     fetch(form.action, { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form) })
       .then(function (r) { return r.json().then(function (j) { return { ok: r.ok && j.success, j: j }; }); })
