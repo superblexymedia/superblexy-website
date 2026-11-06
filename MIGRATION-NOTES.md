@@ -23,7 +23,7 @@ Messages arrive from notify@web3forms.com, currently under Gmail's **Updates** t
 | Record | Value | Action at cutover |
 |---|---|---|
 | NS | dns1/dns2.registrar-servers.com | Keep: we are NOT moving nameservers |
-| @ URL redirect | 162.255.119.96 (Namecheap redirect server) | Changed 5 Nov 2026 to Permanent (301) → https://www.superblexymedia.com/. Known limit: Namecheap's redirect server has no HTTPS certificate, so https://superblexymedia.com (no www) fails in browsers |
+| @ URL redirect | 162.255.119.96 (Namecheap redirect server) | Changed 5 Nov 2026 to Permanent (301) → https://www.superblexymedia.com/. Superseded 6 Nov 2026 — see 'DNS moved to Cloudflare' |
 | www CNAME | was sites.framer.app | **Changed 5 Nov 2026 → superblexy-website.pages.dev** (Cloudflare custom domain Active, SSL on) |
 | @ MX | 1 smtp.google.com | Keep. Google Workspace email |
 | @ TXT | google-site-verification=… | Keep |
@@ -54,3 +54,18 @@ Cloudflare Pages project `superblexy-website` (account info@superblexymedia.com)
 - Search Console property `https://www.superblexymedia.com/` (owner: superblexygraphics@gmail.com) verified by HTML tag. The same tag is now in the new site's <head>, so verification is kept.
 - Sitemap resubmitted (6 pages discovered). Homepage re-indexing requested.
 - Framer subscription can be cancelled.
+
+## DNS moved to Cloudflare (6 Nov 2026)
+
+- Namecheap nameservers changed from BasicDNS to **alexia.ns.cloudflare.com** and **benedict.ns.cloudflare.com**. The domain is still registered (and auto-renews) at Namecheap; DNS is now edited in Cloudflare → superblexymedia.com → DNS.
+- Records in Cloudflare (verified identical via public DNS after the switch):
+  - `@` A 192.0.2.1, **proxied** (placeholder so Cloudflare can redirect the bare domain)
+  - `www` CNAME superblexy-website.pages.dev, proxied
+  - `y5wxzxugnl3n` CNAME gv-fgvhidr7migcex.dv.googlehosted.com, DNS only (Google verification; Cloudflare's scan missed it, added by hand)
+  - `@` MX 1 smtp.google.com
+  - `@` TXT google-site-verification=…, `@` TXT v=spf1 include:_spf.google.com ~all
+  - `_dmarc` TXT v=DMARC1; p=none; rua=mailto:info@superblexymedia.com
+  - `google._domainkey` TXT DKIM (2048-bit, full key verified)
+- Redirect Rule "Redirect from root to WWW": `https://superblexymedia.com/*` → `https://www.superblexymedia.com/${1}`, 301, query string preserved. SSL/TLS → Always Use HTTPS: ON (so http:// is upgraded first).
+- Namecheap's URL-redirect record is no longer used (Namecheap DNS isn't consulted any more).
+- Verified: bare domain over http and https now 301s to www with path and query kept; www pages 200; inbound email delivered after the switch.
